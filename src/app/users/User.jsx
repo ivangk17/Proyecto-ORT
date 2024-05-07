@@ -5,7 +5,7 @@ export default function User(props) {
   return (
     <li className="user-item">
       <div className="card user-item__content">
-        <Link href="#">
+        <Link href={`/users/${props.Id}`}>
           <div className="user-item__image avatar">
             <img src={props.Picture} alt="{props.UserName}" />
           </div>
