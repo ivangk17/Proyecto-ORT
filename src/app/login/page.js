@@ -1,13 +1,12 @@
 // https://mflixbackend.azurewebsites.net/api/users/login
-
 import { redirect } from "next/navigation";
 
 export default function PageLogin() {
   async function handlerLogin(formData) {
     "use server";
     const user = {
-      email: formData.get("email"),
-      password: formData.get("password"),
+      email: formData.get("Usuario"),
+      password: formData.get("Contraseña"),
     };
 
     const request = await fetch(
@@ -18,13 +17,8 @@ export default function PageLogin() {
         body: JSON.stringify(user),
       }
     );
-
-    // TODO1 : preguntar en el request por el request.status
-    const token = (await request.json()).token;
-    // TODO 2: Guardar el token en el localstorage
-
-    // TODO 3 redireccionar a la pagina original, antes de pedir credenciales
-    redirect(`/users`);
+    //const token = (await request.json()).token;
+    //redirect(`/users`);
   }
 
   return (
