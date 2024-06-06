@@ -1,10 +1,14 @@
 "use client";
-import { redirect } from "next/navigation";
-import Login from "./Login";
+import { useState } from 'react';
+import Login from "../login/Login";
+import Signup from "../signup/Signup";
 import Image from "next/image";
-
-
 export default function PageLogin() {
+  const [isLogin, setIsLogin] = useState(true);
+
+  const switchToSignup = () => setIsLogin(false);
+  const switchToLogin = () => setIsLogin(true);
+
   return (
     <div className="w-full h-full">
       <div className="flex flex-row w-full h-full">
@@ -20,7 +24,11 @@ export default function PageLogin() {
           </div>
         </div>
         <div className="lg:w-1/4 md:w-2/4 sm:w-full w-full">
-          <Login /> 
+          {isLogin ? (
+            <Login switchToSignup={switchToSignup} />
+          ) : (
+            <Signup switchToLogin={switchToLogin} />
+          )}
         </div>
       </div>
     </div>
