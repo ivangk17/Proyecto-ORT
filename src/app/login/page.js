@@ -5,7 +5,6 @@ import Signup from "../signup/Signup";
 import Image from "next/image";
 export default function PageLogin() {
   const [isLogin, setIsLogin] = useState(true);
-
   const switchToSignup = () => setIsLogin(false);
   const switchToLogin = () => setIsLogin(true);
 
