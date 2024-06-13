@@ -12,7 +12,7 @@ export default function Login({ switchToSignup }) {
             alt="Your Company"
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Inicia sesión en tu cuenta
+            Inicia sesión en tu cuentaa
           </h2>
         </div>
 
