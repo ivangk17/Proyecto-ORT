@@ -9,7 +9,7 @@ export default function Signup({ switchToLogin }) {
             alt="Your Company"
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Regístrate en tu cuenta
+            Regístrate
           </h2>
         </div>
 
