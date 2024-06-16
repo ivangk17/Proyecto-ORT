@@ -4,16 +4,28 @@ import MenuList from "./MenuList";
 
 const ItemsNav= [
     {
+        url: "/",
+        texto: "Inicio"
+      },
+      {
+        url: "/",
+        texto: "Buscar Profesores"
+      },
+    {
       url: "/quienes-somos",
       texto: "¿Quienes Somos?"
     },
     {
-      url: "/ingresar",
-      texto: "Ingresar"
+      url: "/contacto",
+      texto: "Contacto"
     },
     {
-      url: "/singup",
-      texto: "Crear Cuenta"
+      url: "/Faq",
+      texto: "FAQ"
+    },
+    {
+      url: "/blog",
+      texto: "Blog"
     }
   ]
   

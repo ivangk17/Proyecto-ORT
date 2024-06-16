@@ -1,7 +1,8 @@
 import React from 'react';
-import QuienesSomosComponent from './QuienesSomos'; 
+import Faq from './Faq';
+
 export default function QuienesSomos() {
     return (
-        <QuienesSomosComponent />
+        <Faq />
     );
 }
