@@ -6,11 +6,7 @@ const ItemsNav= [
     {
         url: "/",
         texto: "Inicio"
-      },
-      {
-        url: "/",
-        texto: "Buscar Profesores"
-      },
+    },
     {
       url: "/quienes-somos",
       texto: "¿Quienes Somos?"
@@ -20,12 +16,8 @@ const ItemsNav= [
       texto: "Contacto"
     },
     {
-      url: "/Faq",
+      url: "/faq",
       texto: "FAQ"
-    },
-    {
-      url: "/blog",
-      texto: "Blog"
     }
   ]
   
