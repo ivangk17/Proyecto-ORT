@@ -12,11 +12,19 @@ export default function PageLogin() {
   const [user, setUser] = useState(sessionStorage.getItem('user'));
   const [inicio, setInicio] = useState(false);
 
-  useEffect(() => {
+  useEffect(() => { 
     if (token) {
       sessionStorage.setItem('token', token);
       sessionStorage.setItem('user', user);
-      redirect('/panel');
+      const usuario = JSON.parse(user);
+      let vista;
+      if(usuario.role === 'admin'){
+        vista = '/panel';
+      } else {
+        vista = '/perfil';
+      }
+      redirect(vista);
+      
     } 
   }, [inicio]);
  
@@ -118,6 +126,7 @@ export default function PageLogin() {
                 </div>
                 <p className="mt-10 text-center text-sm text-gray-500">
                   <Link href={'/signup'} className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500 cursor-pointer"> 
+                    No tenes cuenta todavia?
                     Regístrate acá
                   </Link>
                 </p>

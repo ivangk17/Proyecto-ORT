@@ -1,6 +1,20 @@
 "use client";
 import Image from "next/image";
+import { useState, useEffect } from "react";
+import { handlerSignup } from "./signUpService/signUpServer";
+
 export default function PageLogin() {
+  const [error, setError] = useState(null);
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const nuevoUsuario = {
+      username: `${formData.get("firstName")} ${formData.get("lastName")}`,
+      email: formData.get("email"),
+      password: formData.get("password"),
+    };
+    await handlerSignup(nuevoUsuario, setError);
+  };
 
   return (
     <div className="w-full h-full">
@@ -30,7 +44,7 @@ export default function PageLogin() {
           </div>
   
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form className="space-y-6" action="#" method="POST">
+            <form className="space-y-6" onSubmit={handleSubmit} method="POST">
               <div>
                 <label htmlFor="firstName" className="block text-sm font-medium leading-6 text-gray-900">
                   Nombre
@@ -104,7 +118,9 @@ export default function PageLogin() {
                 </button>
               </div>
             </form>
-
+            {error && (
+              <div className="text-red-500 text-sm mt-2">{error}</div>
+            )}
           </div>
         </div>
       </div>
