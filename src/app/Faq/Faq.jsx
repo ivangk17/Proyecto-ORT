@@ -38,10 +38,13 @@ const faqs = [
 
 export default function Faq() {
     return (
-        <div className="mx-auto max-w-screen-xl h-screen flex items-center justify-center bg-center bg-no-repeat overflow-hidden" 
-        style={{ 
-            backgroundImage: `url('/img/eduwave_login.jpg')`
-        }}>
+        <div 
+            className="min-h-screen flex flex-col justify-between mx-auto max-w-screen-xl bg-center bg-no-repeat overflow-hidden relative"
+            style={{
+                backgroundImage: `url('/img/eduwave_login.jpg')`,
+                backgroundSize: "cover",
+            }}
+        >
         <div className="container mx-auto p-4 max-w-full w-full">
             <div className="-mx-4 flex flex-wrap justify-center">
                 <div className="w-full px-4">

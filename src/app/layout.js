@@ -11,6 +11,7 @@ export default function RootLayout({ children }) {
     <html lang="en" className="h-full bg-white">
       <body className="h-full">
         <NavBar />  
+        
         {children}
       </body >  
     </html>
