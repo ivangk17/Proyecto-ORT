@@ -1,5 +1,5 @@
 import Image from 'next/image';
-
+//asda
 export default function Publicacion(props) {
     return (
         <div className="bg-blue-900 text-white shadow-lg rounded-lg overflow-hidden p-4 flex flex-col md:flex-row items-center md:items-start">
