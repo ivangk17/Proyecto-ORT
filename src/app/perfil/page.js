@@ -47,19 +47,25 @@ export default function PageUsuario() {
                 />
             </div>
             <div className="ml-4 flex-grow">
-                <h2 className="text-xl font-bold">{publication.name}</h2>
+                <h2 className="text-xl font-bold">{publication.username}</h2>
                 <p className="mt-2">{publication.description}</p>
                 <p className="mt-2">Precio: ${publication.precio}</p>
                 <p className="mt-2">Teléfono: {publication.telefono}</p>
                 <h3 className="mt-4 font-semibold">Materias</h3>
                 <div className="flex flex-wrap">
-                    {publication.materias.map((materia, index) => (
-                        <span key={index} className="bg-blue-700 rounded-full px-3 py-1 text-sm font-semibold text-white mr-2 mt-2">{materia}</span>
-                    ))}
+                  {publication.materias && publication.materias.map((materia, index) => (
+    <span key={index} className="bg-blue-700 rounded-full px-3 py-1 text-sm font-semibold text-white mr-2 mt-2">{materia}</span>
+))}
                 </div>
-                <div className="mt-4 flex">
-                    <a href={`/`} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full mr-2">Editar</a>
-                </div>
+             
+               <div className="mt-4 flex">
+                {publication.validate ? (
+                <a href={`/`} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full mr-2">Editar</a>
+                ) : (
+                <p className="text-red-500">La publicación está siendo validada.</p>
+                 )}
+              </div>
+                
             </div>
         </div>
     ) : (
