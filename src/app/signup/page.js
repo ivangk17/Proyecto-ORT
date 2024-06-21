@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { handlerSignup } from "./signUpService/signUpServer";
+import { handlerSignup } from "./signupService/signUpServer";
 
 export default function PageLogin() {
   const [error, setError] = useState(null);
