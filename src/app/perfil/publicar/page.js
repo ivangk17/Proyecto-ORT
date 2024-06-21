@@ -3,10 +3,30 @@
 import Select from 'react-select';
 import { useState, useEffect } from 'react';
 import { options } from './select/options';
+import { handlerPublicar, tienePublicacion } from './publicarService/publicarServer';
 
 export default function PagePublicar() {
     const [selectedOptions, setSelectedOptions] = useState([]);
     const [materiasSeleccionadas, setMaterias] = useState([]);
+
+    const user = sessionStorage.getItem('user');
+    if (!user) {
+      window.location.href = '/login';
+      return;
+    } 
+
+    const role = JSON.parse(user).role;
+    if (role !== 'profesor') {
+      window.location.href = '/';
+      return;
+    }
+    const token = sessionStorage.getItem('token');
+    const userId = JSON.parse(user)['_id'];
+    
+    tienePublicacion(userId)
+
+
+
     const handleChange = (selected) => {
         setSelectedOptions(selected);
         const materias = selected.map(option => option.value); 
@@ -17,12 +37,14 @@ export default function PagePublicar() {
         event.preventDefault();
         const formData = new FormData(event.target);
         const publicacion = {
+            user_id: userId,
             telefono: formData.get("telefono"),
             precio: formData.get("precio"),
             description: formData.get("description"),
             materias: materiasSeleccionadas
         };
-        console.log(publicacion);
+        console.log(token);
+        await handlerPublicar(publicacion, token);
       };
    
 
