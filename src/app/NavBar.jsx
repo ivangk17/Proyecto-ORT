@@ -3,10 +3,9 @@ import Logo from "./Logo";
 import MenuList from "./MenuList";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { redirect } from "next/navigation";
 
 export default function NavBar() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [token, setToken] = useState(sessionStorage.getItem('token'));
   const [itemsNav, setItemsNav] = useState([
     { url: "/", texto: "Publicaciones" },
     { url: "/quienes-somos", texto: "¿Quienes Somos?" },
@@ -14,33 +13,48 @@ export default function NavBar() {
     { url: "/faq", texto: "FAQ" },
     { url: "/signup", texto: "Registrate"}
   ]);
-  
 
-  useEffect(() => {
-    const token = sessionStorage.getItem('token');
-    if(token){
-        setIsLoggedIn(true);
-        const user = JSON.parse(sessionStorage.getItem('user'));
-        if (user && user.role) {
-            if (user.role === 'admin') {
-            setItemsNav([
-                { url: "/panel/validadas", texto: "Publicaciones validadas" },
-                { url: "/panel/novalidadas", texto: "Publicaciones no validadas" },
-            ]);
-            } else {
-            setItemsNav([
-                { url: "/", texto: "Publicaciones" },
-                { url: "/perfil/mipublicacion", texto: "Mis Publicaciones" },
-            ]);
-            }
+  const updateMenuItems = (user) => {
+    if (user && user.role) {
+      if (user.role === 'admin') {
+        setItemsNav([
+          { url: "/panel/validadas", texto: "Publicaciones validadas" },
+          { url: "/panel/novalidadas", texto: "Publicaciones no validadas" },
+        ]);
+      } else {
+        setItemsNav([
+          { url: "/", texto: "Publicaciones" },
+          { url: "/perfil/mipublicacion", texto: "Mis Publicaciones" },
+        ]);
       }
     }
-  }, []);
+  };
+
+  useEffect(() => {
+    if (token) {
+      const user = JSON.parse(sessionStorage.getItem('user'));
+      updateMenuItems(user);
+    } else {
+      setItemsNav([
+        { url: "/", texto: "Publicaciones" },
+        { url: "/quienes-somos", texto: "¿Quienes Somos?" },
+        { url: "/contacto", texto: "Contacto" },
+        { url: "/faq", texto: "FAQ" },
+        { url: "/signup", texto: "Registrate"}
+      ]);
+    }
+  }, [token]);
 
   const handleLogout = () => {
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('user');
-    setIsLoggedIn(false);
+    setItemsNav([
+      { url: "/", texto: "Publicaciones" },
+      { url: "/quienes-somos", texto: "¿Quienes Somos?" },
+      { url: "/contacto", texto: "Contacto" },
+      { url: "/faq", texto: "FAQ" },
+      { url: "/signup", texto: "Registrate"}
+    ]);
     window.location.href = "/login";
   };
 
@@ -53,7 +67,7 @@ export default function NavBar() {
         </div>
         <div className="flex items-center gap-4">
           <div className="sm:flex sm:gap-4">
-            {isLoggedIn ? (
+            {token ? (
               <button 
                 onClick={handleLogout} 
                 className="block rounded-md bg-red-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-red-700 dark:hover:bg-red-500"

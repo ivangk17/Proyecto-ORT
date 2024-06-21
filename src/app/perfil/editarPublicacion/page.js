@@ -98,6 +98,9 @@ export default function PageEditar() {
                 },
                 body: JSON.stringify(publicacion),
             });
+            if(response.status === 200){
+                window.location.href = '/perfil';
+            }
         } catch (error) {
             console.error("Error en la solicitud de registro:", error);
         }
