@@ -29,20 +29,24 @@ export async function handlerPublicar (publicacion, token) {
   export async function tienePublicacion (userId) {
     try {
       const response = await fetch(`http://localhost:3000/api/publicaciones/byUser/${userId}`, {
-        method: "POST",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
       });
 
       if (response.status === 200) {
-        if(data){
-            window.location.href = "/perfil";
-        } 
+        const data = await response.json();
+    
+        if (data) {
+          window.location.href = "/perfil";
+          return;
+        }
+
       } else {
-        // Registro fallido, manejar el error
-       /*  setError("Error al registrar usuario."); */
+        console.error("Error: ", response.status, response.statusText);
       }
+      
     } catch (error) {
       console.error("Error en la solicitud de registro:", error);
       /* setError("Error en la solicitud de registro. Inténtelo de nuevo más tarde."); */
