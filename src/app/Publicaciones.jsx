@@ -35,7 +35,7 @@ export default function Publicaciones() {
                 backgroundSize: "cover",
             }}
         >
-            <div className="flex justify-end mb-5 mt-10 mr-10">
+            <div className="flex justify-end mt-5 mr-5">
                 <div className="w-1/5">
                     <Select
                         onChange={handleMateriaChange}
@@ -75,7 +75,7 @@ export default function Publicaciones() {
                     </div>
                 </div>
                 <div 
-                    className="flex justify-between bg-white py-4 px-6 w-full absolute bottom-20"
+                    className="flex justify-between bg-white py-4 px-6 w-full absolute bottom-5"
                     style={{ backgroundColor: 'rgba(100, 100, 255, 0.8)' }} // Fondo semitransparente
                 >
                     <button 
