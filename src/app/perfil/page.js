@@ -63,10 +63,19 @@ export default function PageUsuario() {
             </div>
         </div>
     ) : (
-        <div>
-            <p>No tiene publicaciones.</p>
-            <button>Botón</button> 
+        <div className="max-w-sm rounded overflow-hidden shadow-lg p-4 m-4 bg-blue-100">
+        <div className="px-6 py-4">
+          <div className="font-bold text-xl mb-2">No tiene ninguna publicacion.</div>
+          <p className="text-gray-700 text-base">
+            Actualmente no tiene ninguna publicacione subida.
+          </p>
         </div>
+        <div className="px-6 pt-4 pb-2">
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Agregar publicacion
+          </button>
+        </div>
+      </div>
     )}
 </div>
   );
