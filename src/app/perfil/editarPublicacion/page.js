@@ -40,7 +40,7 @@ export default function PageEditar() {
                 });
                 if (response.status === 200) {
                     const publicacion = await response.json();
-                    if (publicacion.validate) {
+                    if (publicacion.validate || publicacion.rejected) {
                         setFormData({
                             telefono: publicacion.telefono,
                             precio: publicacion.precio,
