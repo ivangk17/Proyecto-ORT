@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
       setToken(storedToken);
       setUser(storedUser);
     }
-  }, [token, user]);
+  }, []);
 
   return (
     <AuthContext.Provider value={{ token, setToken, user, setUser }}>
