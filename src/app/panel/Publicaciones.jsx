@@ -88,7 +88,7 @@ export default function Publicaciones() {
           <div className="flex bg-blue-900 h-20 text-center items-center">
             <h1 className="text-5xl text-white p-5">
               <strong>
-                No hay publicaciones para la materia seleccionada
+                No hay publicaciones por validar.
               </strong>
             </h1>
           </div>
