@@ -4,12 +4,11 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { handlerLogin } from "./loginService/loginServer";
-
+import { useAuth } from '../../context/AuthContext';
 
 export default function PageLogin() {
+  const { token, setToken, user, setUser } = useAuth();
   const [error, setError] = useState(null);
-  const [token, setToken] = useState(sessionStorage.getItem('token'));
-  const [user, setUser] = useState(sessionStorage.getItem('user'));
   const [inicio, setInicio] = useState(false);
 
   useEffect(() => { 
@@ -24,10 +23,8 @@ export default function PageLogin() {
         vista = '/perfil';
       }
       redirect(vista);
-      
     } 
-  }, [inicio]);
- 
+  }, [inicio, token, user]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -39,9 +36,6 @@ export default function PageLogin() {
     };
     await handlerLogin(user, setInicio, setError, setToken, setUser);
   };
-
-  
-
 
   return (
     <div className="w-full h-full">
@@ -92,11 +86,6 @@ export default function PageLogin() {
                 <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
                   Contraseña
                 </label>
-                {/* <div className="text-sm">
-                  <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                    ¿Olvidaste tu contraseña?
-                  </a>
-                </div> */}
               </div>
               <div className="mt-2">
                 <input

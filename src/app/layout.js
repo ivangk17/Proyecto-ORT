@@ -1,5 +1,7 @@
 import NavBar from "./NavBar";
 import "./globals.css";
+import { AuthProvider } from '../context/AuthContext';
+
 
 export const metadata = {
   title: "EduWave",
@@ -9,9 +11,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className="h-full bg-white">
+      
       <body className="h-full">
-        <NavBar />  
-        {children}
+        <AuthProvider>
+          <NavBar />  
+          {children}
+        </AuthProvider>
       </body >  
     </html>
   );

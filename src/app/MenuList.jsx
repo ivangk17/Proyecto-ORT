@@ -5,7 +5,7 @@ export default function MenuList(props){
     return (
         <nav aria-label="Global" className="hidden md:block">
             <ul className="flex items-center gap-6 text-sm">
-                {props.menuItems.map((menuItem, index) =>{
+                {props.itemsNav.map((menuItem, index) =>{
                     return(
                         <MenuItem 
                             key={index}

@@ -3,9 +3,10 @@ import Logo from "./Logo";
 import MenuList from "./MenuList";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { useAuth } from '../context/AuthContext';
 
 export default function NavBar() {
-  const token = sessionStorage.getItem('token');
+  const { token, setToken, user, setUser } = useAuth();
   const [itemsNav, setItemsNav] = useState([
     { url: "/", texto: "Publicaciones" },
     { url: "/quienes-somos", texto: "¿Quienes Somos?" },
@@ -31,7 +32,6 @@ export default function NavBar() {
   };
 
   useEffect(() => {
-    console.log("render");
     if (token) {
       const user = JSON.parse(sessionStorage.getItem('user'));
       updateMenuItems(user);
@@ -44,11 +44,13 @@ export default function NavBar() {
         { url: "/signup", texto: "Registrate"}
       ]);
     }
-  }, []);
+  }, [token]);
 
   const handleLogout = () => {
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('user');
+    setToken(null);
+    setUser(null);
     setItemsNav([
       { url: "/", texto: "Publicaciones" },
       { url: "/quienes-somos", texto: "¿Quienes Somos?" },
@@ -56,47 +58,24 @@ export default function NavBar() {
       { url: "/faq", texto: "FAQ" },
       { url: "/signup", texto: "Registrate"}
     ]);
-    window.location.href = "/login";
   };
 
   return (
-    <header className="bg-white dark:bg-gray-900">
-      <div className="mx-auto flex h-16 max-w-screen-xl items-center gap-8 px-4 sm:px-6 lg:px-8">
-        <Logo />
-        <div className="flex flex-1 items-center justify-end md:justify-between">
-          <MenuList menuItems={itemsNav} />
-        </div>
-        <div className="flex items-center gap-4">
-          <div className="sm:flex sm:gap-4">
-            {token ? (
-              <button 
-                onClick={handleLogout} 
-                className="block rounded-md bg-red-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-red-700 dark:hover:bg-red-500"
-              >
-                Logout
-              </button>
-            ) : (
-              <Link href="/login" className="block rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-teal-700 dark:hover:bg-teal-500">
-                  Login
-              </Link>
-            )}
-          </div>
-          <button
-            className="block rounded bg-gray-100 p-2.5 text-gray-600 transition hover:text-gray-600/75 md:hidden dark:bg-gray-800 dark:text-white dark:hover:text-white/75"
-          >
-            <span className="sr-only">Toggle menu</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
+    <header className="w-full h-20 flex items-center justify-between shadow-sm bg-neutral-900 sticky top-0 z-50">
+      <Logo />
+      <nav>
+        <MenuList itemsNav={itemsNav} />
+      </nav>
+      <div className="flex justify-end gap-5">
+        {token ? (
+          <button onClick={handleLogout} className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+            Logout
           </button>
-        </div>
+        ) : (
+          <Link href="/login" className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+              Login
+          </Link>
+        )}
       </div>
     </header>
   );
