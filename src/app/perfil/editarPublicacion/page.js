@@ -1,8 +1,7 @@
 "use client";
-
-import Select from 'react-select';
 import { useState, useEffect } from 'react';
-import { options } from '../publicar/select/options';
+import { options } from '../publicar/mockOptions';
+import FormEditar from './FormEditar';
 
 export default function PageEditar() {
     const [selectedOptions, setSelectedOptions] = useState([]);
@@ -80,7 +79,7 @@ export default function PageEditar() {
         }));
     };
 
-    const handleSubmit  = async (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const publicacion = {
             _id: publicacionId,
@@ -90,7 +89,7 @@ export default function PageEditar() {
             materias: materiasSeleccionadas
         };
         try {
-            const response = await fetch(`http://localhost:3000/api/publicaciones/${publicacionId}/update`, {
+            const response = await fetch(`http://localhost:3000/api/publicaciones/update/${publicacionId}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -111,79 +110,30 @@ export default function PageEditar() {
     }
 
     return (
-        <>
-            <div className="mx-auto max-w-screen-xl h-screen flex items-center justify-center bg-center bg-no-repeat" 
-                style={{ 
-                    backgroundImage: `url('/img/eduwave_login.jpg')`
-                }}>
-                <div className="mx-auto max-w-lg bg-white bg-opacity-90 p-8 rounded-lg shadow-lg">
-                    <h1 className="text-center text-2xl font-bold text-indigo-600 sm:text-3xl">Editar</h1>
+        <div 
+            className="min-h-screen flex flex-col flex items-center justify-center mx-auto max-w-screen-xl bg-center bg-no-repeat overflow-hidden relative"
+            style={{
+                backgroundImage: `url('/img/eduwave_login.jpg')`,
+                backgroundSize: "cover",
+            }}
+        >
+            <div className="mx-auto max-w-lg bg-white bg-opacity-90 p-8 rounded-lg shadow-lg">
+                <h1 className="text-center text-2xl font-bold text-indigo-600 sm:text-3xl">Editar</h1>
 
-                    <p className="mx-auto mt-4 max-w-md text-center text-gray-500">
-                        Ingresa los datos solicitados para empezar a publicar.
-                        <br />
-                        Recorda que una vez editada tu publicación, se hará visible cuando un administrador la valide
-                    </p>
+                <p className="mx-auto mt-4 max-w-md text-center text-gray-500">
+                    Ingresa los datos solicitados para empezar a publicar.
+                    <br />
+                    Recorda que una vez editada tu publicación, se hará visible cuando un administrador la valide
+                </p>
 
-                    <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-                        <div className="relative">
-                            <div className="flex space-x-4">
-                                <input
-                                    name="telefono"
-                                    type="text"
-                                    className="w-1/2 rounded-lg border-gray-200 p-4 text-sm shadow-sm"
-                                    placeholder="Teléfono celular"
-                                    pattern="^\+?\d{0,4}?\s?\d{10}$"
-                                    title="Por favor ingresa un número de teléfono válido. Debe comenzar con un signo + y contener al menos 10 dígitos."
-                                    required
-                                    value={formData.telefono}
-                                    onChange={handleInputChange}
-                                />
-                                <input
-                                    name="precio"
-                                    type="number"
-                                    className="w-1/2 rounded-lg border-gray-200 p-4 text-sm shadow-sm"
-                                    placeholder="Precio de sus clases"
-                                    min="100"
-                                    step="50"
-                                    title="Por favor ingresa un precio válido."
-                                    required
-                                    value={formData.precio}
-                                    onChange={handleInputChange}
-                                />
-                            </div>
-                        </div>
-                        <div className="relative">
-                            <textarea
-                                name="description"
-                                className="w-full rounded-lg border-gray-200 p-4 text-sm shadow-sm"
-                                placeholder="Ingresa una breve descripción de sus servicios"
-                                rows="5"
-                                value={formData.description}
-                                onChange={handleInputChange}
-                            />
-                        </div>
-                        <div className="relative">
-                            <Select
-                                name="materias"
-                                isMulti
-                                value={selectedOptions}
-                                onChange={handleChange}
-                                options={options}
-                                className="w-full"
-                                placeholder="Selecciona tus opciones"
-                            /> 
-                        </div>
-
-                        <button
-                            type="submit"
-                            className="block w-full rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white"
-                        >
-                            Editar
-                        </button>
-                    </form>
-                </div>
+                <FormEditar
+                    handleSubmit={handleSubmit}
+                    handleInputChange={handleInputChange}
+                    handleChange={handleChange}
+                    formData={formData}
+                    selectedOptions={selectedOptions}
+                />
             </div>
-        </>
+        </div>
     );
 }

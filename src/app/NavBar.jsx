@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 
 export default function NavBar() {
-  const [token, setToken] = useState(sessionStorage.getItem('token'));
+  const token = sessionStorage.getItem('token');
   const [itemsNav, setItemsNav] = useState([
     { url: "/", texto: "Publicaciones" },
     { url: "/quienes-somos", texto: "¿Quienes Somos?" },
@@ -24,13 +24,14 @@ export default function NavBar() {
       } else {
         setItemsNav([
           { url: "/", texto: "Publicaciones" },
-          { url: "/perfil/mipublicacion", texto: "Mis Publicaciones" },
+          { url: "/perfil", texto: "Mi publicacion" },
         ]);
       }
     }
   };
 
   useEffect(() => {
+    console.log("render");
     if (token) {
       const user = JSON.parse(sessionStorage.getItem('user'));
       updateMenuItems(user);
@@ -43,7 +44,7 @@ export default function NavBar() {
         { url: "/signup", texto: "Registrate"}
       ]);
     }
-  }, [token]);
+  }, []);
 
   const handleLogout = () => {
     sessionStorage.removeItem('token');

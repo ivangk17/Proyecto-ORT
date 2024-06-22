@@ -51,11 +51,14 @@ export default function PageUsuario() {
       .catch(error => console.error('Error deleting publication:', error));
   }
   return (
-    <div
-      className="mx-auto max-w-screen-xl h-screen flex items-center justify-center bg-center bg-no-repeat"
-      style={{ backgroundImage: "url('/img/eduwave_login.jpg')" }}
-    >
-      {publication ? (
+       <div 
+            className="min-h-screen flex flex-col flex items-center justify-center mx-auto max-w-screen-xl bg-center bg-no-repeat overflow-hidden relative"
+            style={{
+                backgroundImage: `url('/img/eduwave_login.jpg')`,
+                backgroundSize: "cover",
+            }}
+        >
+        {publication ? (
         <div className="bg-blue-900 text-white shadow-lg rounded-lg overflow-hidden p-4 flex flex-col items-center w-96">
           <div className="flex-shrink-0">
             <Image
@@ -66,7 +69,7 @@ export default function PageUsuario() {
               className="rounded-full"
             />
           </div>
-          <div className="ml-4 flex-grow w-full">
+          <div className="m-4 flex-grow w-full">
             <p className="mt-2">{publication.description}</p>
             <p className="mt-2">Precio: ${publication.precio}</p>
             <p className="mt-2">Teléfono: {publication.telefono}</p>
@@ -108,8 +111,8 @@ export default function PageUsuario() {
               ) : publication.rejected ? (
 
                  <div className="flex flex-col items-center">
-                  <p className="text-red-500 mb-4 text-left">
-                    La publicación fue rechazada.
+                  <p className="text-red-500 mb-4 text-center">
+                    La publicación fue rechazada, editela para que los administradores vuelvan a evaluarla.
                   </p>
               <div className="flex justify-center">
                   <Link
@@ -122,14 +125,14 @@ export default function PageUsuario() {
                 </div>
               ) : publication.edited ? (
                 <div>
-                  <p className="text-yellow-500 mb-4 text-left">
+                  <p className="text-yellow-500 mb-4 text-center">
                     La publicación fue editada y está siendo validada por los
                     administradores.
                   </p>
                 </div>
               ) : (
-                <p className="text-yellow-500 text-left">
-                  La publicación está siendo validada.
+                <p className="text-yellow-500 text-center">
+                  La publicación está siendo validada por los administradores.
                 </p>
               )}
             </div>
@@ -137,7 +140,7 @@ export default function PageUsuario() {
         </div>
       ) : (
         <div className="max-w-sm rounded overflow-hidden shadow-lg p-4 m-4 bg-blue-100 w-96 h-auto">
-          <div className="px-6 py-4">
+          <div className="px-6 py-4 text-center justify-center">
             <div className="font-bold text-xl mb-2 overflow-ellipsis overflow-hidden whitespace-nowrap">
               No tiene ninguna publicación.
             </div>
@@ -145,7 +148,7 @@ export default function PageUsuario() {
               Actualmente no tiene ninguna publicación subida.
             </p>
           </div>
-          <div className="px-6 pt-4 pb-2">
+          <div className="flex justify-center pb-2">
             <Link
               href={"/perfil/publicar"}
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
@@ -153,7 +156,7 @@ export default function PageUsuario() {
               Agregar publicación
             </Link>
           </div>
-        </div>
+      </div>
       )}
     </div>
   );
