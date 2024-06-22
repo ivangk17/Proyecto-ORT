@@ -3,14 +3,14 @@ import React from 'react';
 export default function QuienesSomos() {
   return (
     <div 
-        className="min-h-screen flex flex-col justify-between mx-auto max-w-screen-xl bg-center bg-no-repeat overflow-hidden relative"
+        className="min-h-screen flex flex-col flex items-center justify-center mx-auto max-w-screen-xl bg-center bg-no-repeat overflow-hidden relative"
         style={{
             backgroundImage: `url('/img/eduwave_login.jpg')`,
             backgroundSize: "cover",
         }}
-    >
+    >   
     <div className="container mx-auto p-4 max-w-full w-full">
-        <div className="section mb-10 max-w-3xl w-full mx-auto bg-white bg-opacity-90 p-6 rounded-lg">
+        <div className="section mb-10 max-w-3xl w-full mx-auto bg-white bg-opacity-75 p-6 rounded-lg">
             <h1 className="text-4xl font-bold text-gray-800 mb-4">¿Quiénes Somos?</h1>
             <div className="copete text-lg text-gray-600">
                 <p>
