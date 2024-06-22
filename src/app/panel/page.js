@@ -2,28 +2,31 @@
 import { useEffect, useState } from "react";
 import PublicacionesList from "./PublicacionesList";
 import Paginado from "../Paginado";
+import { useAuth } from '../../context/AuthContext';
+import { useRouter } from 'next/navigation';
 
 export default function PublicacionesNoValidadasPage() {
+  const { token, user } = useAuth();
   const [publicaciones, setPublicaciones] = useState([]);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(9);
   const [total, setTotal] = useState(-1);
-
-  const user = sessionStorage.getItem('user');
-  if (!user) {
-      window.location.href = '/login';
-      return null;
-  } 
-
-  const role = JSON.parse(user).role;
-  if (role !== 'admin') {
-      window.location.href = '/';
-      return null;
-  }
+  const router = useRouter();
 
   useEffect(() => {
+    if (!user) {
+      router.push('/login');
+      return;
+    } 
+
+    const role = JSON.parse(user).role;
+    if (role !== 'admin') {
+      router.push('/');
+      return;
+    }
+
     fetchPublicaciones();
-  }, [page, pageSize]);
+  }, [page, pageSize, user]);
 
   const fetchPublicaciones = () => {
     fetch(`http://localhost:3000/api/publicaciones/noValidas?page=${page}&pageSize=${pageSize}`)
@@ -35,8 +38,6 @@ export default function PublicacionesNoValidadasPage() {
   };
 
   const handleValidate = (id) => {
-    const token = sessionStorage.getItem('token');
-  
     fetch(`http://localhost:3000/api/publicaciones/validar/${id}`, {
       method: 'PUT',
       headers: {
@@ -55,8 +56,6 @@ export default function PublicacionesNoValidadasPage() {
   };
 
   const handleReject = (id) => {
-    const token = sessionStorage.getItem('token');
-
     fetch(`http://localhost:3000/api/publicaciones/rechazar/${id}`, {
       method: 'PUT',
       headers: {
