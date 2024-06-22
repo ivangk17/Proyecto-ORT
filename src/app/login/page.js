@@ -13,8 +13,6 @@ export default function PageLogin() {
 
   useEffect(() => { 
     if (token) {
-      sessionStorage.setItem('token', token);
-      sessionStorage.setItem('user', user);
       const usuario = JSON.parse(user);
       let vista;
       if(usuario.role === 'admin'){
