@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAuth } from '../../context/AuthContext'; 
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 export default function PagePerfil() {
   const [publication, setPublication] = useState(null);
@@ -38,19 +40,57 @@ export default function PagePerfil() {
   }, [deletePublication, user, token]);
 
   const handleDeletePublication = () => {
-    fetch(`http://localhost:3000/api/publicaciones/delete/${publication._id}`, {
-      method: 'DELETE',
-      headers: {
-       "authorization": `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        setDeletePublication(true);
-      })
-      .catch(error => console.error('Error deleting publication:', error));
-  }
+    // Mostrar SweetAlert de confirmación
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Estás a punto de eliminar esta publicación. Esta acción no se puede deshacer.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(`http://localhost:3000/api/publicaciones/delete/${publication._id}`, {
+          method: 'DELETE',
+          headers: {
+            'authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+        })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          })
+          .then(data => {
+            setDeletePublication(true);
+            Swal.fire({
+              icon: 'success',
+              title: '¡Eliminación exitosa!',
+              text: 'La publicación ha sido eliminada correctamente.',
+              confirmButtonText: 'Aceptar'
+            });
+          })
+          .catch(error => {
+            console.error('Error deleting publication:', error);
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Hubo un problema al eliminar la publicación.',
+              confirmButtonText: 'Aceptar'
+            });
+          });
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire({
+          title: 'Cancelado',
+          text: 'No se ha eliminado la publicación.',
+          icon: 'info',
+          confirmButtonText: 'Aceptar'
+        });
+      }
+    });
+  };
 
   return (
        <div 
@@ -113,9 +153,13 @@ export default function PagePerfil() {
               ) : publication.rejected ? (
 
                  <div className="flex flex-col items-center">
-                  <p className="text-red-500 mb-4 text-center">
+                  <p className="text-sm text-red-500 mb-4 text-center">
                     La publicación fue rechazada, editela para que los administradores vuelvan a evaluarla.
                   </p>
+                  <p className="text-red-500 mb-4 text-center">
+                  Razon: {publication.reason}
+                  </p>
+                  
               <div className="flex justify-center">
                   <Link
                     href={`/perfil/editarPublicacion`}
@@ -127,13 +171,13 @@ export default function PagePerfil() {
                 </div>
               ) : publication.edited ? (
                 <div>
-                  <p className="text-yellow-500 mb-4 text-center">
+                  <p className="text-sm text-yellow-500 mb-4 text-center">
                     La publicación fue editada y está siendo validada por los
                     administradores.
                   </p>
                 </div>
               ) : (
-                <p className="text-yellow-500 text-center">
+                <p className="text-sm text-yellow-500 text-center">
                   La publicación está siendo validada por los administradores.
                 </p>
               )}

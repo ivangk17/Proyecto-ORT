@@ -2,12 +2,13 @@
 import { useState } from 'react';
 import { handlerPublicar, tienePublicacion } from './handlerPublicar';
 import FormPublicar from './FormPublicar'
+import { useAuth } from '../../../context/AuthContext';
 
 export default function PagePublicar() {
     const [selectedOptions, setSelectedOptions] = useState([]);
     const [materiasSeleccionadas, setMaterias] = useState([]);
+    const {token, user} = useAuth();
 
-    const user = sessionStorage.getItem('user');
     if (!user) {
         window.location.href = '/login';
         return null;
@@ -19,7 +20,6 @@ export default function PagePublicar() {
         return null;
     }
 
-    const token = sessionStorage.getItem('token');
     const userId = JSON.parse(user)['_id'];
 
     tienePublicacion(userId);
@@ -40,7 +40,6 @@ export default function PagePublicar() {
             description: formData.get("description"),
             materias: materiasSeleccionadas
         };
-        console.log(token);
         await handlerPublicar(publicacion, token);
     };
 
