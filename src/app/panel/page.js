@@ -1,162 +1,54 @@
 "use client";
 import { useEffect, useState } from "react";
-import PublicacionesList from "./PublicacionesList";
-import Paginado from "../Paginado";
 import { useAuth } from "../../context/AuthContext";
-import Swal from 'sweetalert2';
-import 'sweetalert2/dist/sweetalert2.min.css';
+import TarjetaDashboard from "./tarjetaDarshboard";
 
-
-export default function PublicacionesNoValidadasPage() {
+export default function PanelPage() {
   const { token, user } = useAuth();
-  const [publicaciones, setPublicaciones] = useState([]);
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(9);
-  const [total, setTotal] = useState(-1);
+  const [estadistica, setEstadistica] = useState({});
+
+  const fetchPublicaciones = () => {
+    fetch(`http://localhost:3000/api/publicaciones/estadistica`, {
+      headers: {
+        authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setEstadistica(data);
+      })
+      .catch((error) => {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Error al obtener estadisticas: " + error.message,
+        });
+        setEstadistica({
+          validadas: 0,
+          rechazadas: 0,
+          noValidadas: 0,
+          total: 0,
+        });
+      });
+  };
 
   useEffect(() => {
     if (!user) {
-      window.location.href = '/login';
+      window.location.href = "/login";
       return null;
-    } 
+    }
 
     const role = JSON.parse(user).role;
-    if (role !== 'admin') {
-        window.location.href = '/';
-        return null;
+    if (role !== "admin") {
+      window.location.href = "/";
+      return null;
     }
 
-    if(token){
+    if (token) {
       fetchPublicaciones();
     }
-    
-  }, [page, pageSize]);
-
-  const fetchPublicaciones = () => {
-    fetch(`http://localhost:3000/api/publicaciones/noValidas?page=${page}&pageSize=${pageSize}`,
-     {
-      headers: {
-        'authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-    }
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      setPublicaciones(data.publicaciones);
-      setTotal(data.total);
-    })
-    .catch((error) => console.error('Error fetching publications:', error));
-  };
-
-  const handleValidate = (id) => {
-    Swal.fire({
-      title: '¿Estás seguro?',
-      text: 'Estás a punto de validar esta publicación como correcta.',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Sí, validar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        fetch(`http://localhost:3000/api/publicaciones/validar/${id}`, {
-          method: 'PUT',
-          headers: {
-            'authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        })
-          .then(response => {
-            if (!response.ok) {
-              throw new Error('Network response was not ok');
-            }
-            return response.json();
-          })
-          .then(() => {
-            fetchPublicaciones();
-            Swal.fire({
-              icon: 'success',
-              title: '¡Validación exitosa!',
-              text: 'La publicación ha sido validada correctamente.',
-              confirmButtonText: 'Aceptar'
-            });
-          })
-          .catch(error => {
-            console.error('Error:', error);
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: 'Hubo un problema al validar la publicación.',
-              confirmButtonText: 'Aceptar'
-            });
-          });
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
-        Swal.fire({
-          title: 'Cancelado',
-          text: 'No se ha validado la publicación.',
-          icon: 'info',
-          confirmButtonText: 'Aceptar'
-        });
-      }
-    });
-  };
-  const handleReject = async (publicacionId) => {
-    const { value: razon } = await Swal.fire({
-        title: 'Ingrese la Razón de Rechazo',
-        input: 'textarea',
-        inputLabel: 'Razón',
-        inputPlaceholder: 'Escriba la razón de rechazo...',
-        inputAttributes: {
-            'aria-label': 'Razón de rechazo'
-        },
-        showCancelButton: true,
-        confirmButtonText: 'Enviar',
-        cancelButtonText: 'Cancelar',
-        showLoaderOnConfirm: true,
-        preConfirm: (razon) => {
-            if (!razon) {
-                Swal.showValidationMessage('Debe ingresar una razón de rechazo');
-            }
-            return razon;
-        },
-        allowOutsideClick: () => !Swal.isLoading()
-    });
-
-    if (razon) {
-        try {
-            const response = await fetch(`http://localhost:3000/api/publicaciones/rechazar/${publicacionId}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    "authorization": `Bearer ${token}`
-                },
-                body:JSON.stringify({reason:razon})    
-            });
-
-            if (response.status === 200) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Publicación Rechazada',
-                    text: 'La publicación ha sido rechazada correctamente.',
-                    confirmButtonText: 'Aceptar'
-                })
-                .then(() => {
-                  fetchPublicaciones();
-              });
-            } else {
-                throw new Error('Error en el rechazo de la publicación');
-            }
-        } catch (error) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Hubo un problema al intentar rechazar la publicación. Inténtelo de nuevo más tarde.',
-                confirmButtonText: 'Aceptar'
-            });
-        }
-    }
-};
-
-  const totalPages = Math.ceil(total / pageSize);
+  }, [token, user]);
 
   return (
     <div
@@ -166,30 +58,37 @@ export default function PublicacionesNoValidadasPage() {
         backgroundSize: "cover",
       }}
     >
-      {total === 0 ? (
-        <div className="flex-grow flex items-center justify-center">
-          <div className="bg-blue-900 h-20 text-center items-center flex">
-              <h1 className="text-5xl text-white p-5">
-                  <strong>
-                      No hay publicaciones para validar.
-                  </strong>
-              </h1>
-          </div>
+      <div className="min-h-screen flex flex-col justify-between mx-auto max-w-screen-xl bg-center bg-no-repeat overflow-hidden relative">
+        <h1 className="text-4xl font-bold text-center mt-8 mb-4 text-white">
+          DASHBOARD PUBLICACIONES
+        </h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8">
+          <TarjetaDashboard
+            titulo="En espera validacion"
+            link="/panel/no-validadas"
+            datos={estadistica.noValidadas}
+            clase="bg-yellow-500 bg-opacity-50 p-16 rounded-lg shadow-lg flex flex-col items-center justify-center h-96 w-full"
+          />
+          <TarjetaDashboard
+            titulo="Rechazadas"
+            link="/panel/rechazadas"
+            datos={estadistica.rechazadas}
+            clase="bg-red-500 bg-opacity-50 p-16 rounded-lg shadow-lg flex flex-col items-center justify-center h-96 w-full"
+          />
+          <TarjetaDashboard
+            titulo="Activas"
+            link="/"
+            datos={estadistica.validadas}
+            clase="bg-green-500 bg-opacity-50 p-16 rounded-lg shadow-lg flex flex-col items-center justify-center h-96 w-full"
+          />
+          <TarjetaDashboard
+            titulo="Total"
+            link="/panel"
+            datos={estadistica.total}
+            clase="bg-gray-900 bg-opacity-50 p-16 rounded-lg shadow-lg flex flex-col items-center justify-center h-96 w-full"
+          />
+        </div>
       </div>
-      ) : (
-        <>
-          <PublicacionesList 
-            publicaciones={publicaciones}
-            handleReject={handleReject}
-            handleValidate={handleValidate}
-          />
-          <Paginado 
-            page={page} 
-            totalPages={totalPages} 
-            setPage={setPage} 
-          />
-        </>
-      )}
     </div>
   );
 }

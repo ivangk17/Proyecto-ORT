@@ -15,6 +15,7 @@ export default function PublicacionesList(props) {
                     telefono={publicacion.telefono}
                     onValidate={props.handleValidate}
                     onReject={props.handleReject}
+                    reason={publicacion.reason}
                 />
                 </div>
             ))}

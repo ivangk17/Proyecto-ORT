@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from 'next/image';
 
 export default function Publicacion(props) {
   return (
@@ -28,19 +28,25 @@ export default function Publicacion(props) {
             </span>
           ))}
         </div>
-        <div className="flex justify-end items-center mt-4 space-x-2">
-          <button
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-            onClick={() => props.onValidate(props.id)}
-          >
-            Validar
-          </button>
-          <button
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-            onClick={() => props.onReject(props.id)}
-          >
-            Rechazar
-          </button>
+        <div className="mt-4">
+          {props.reason ? (
+            <p className="text-xs text-red-500">Razon de rechazo: {props.reason}</p>
+          ) : (
+            <div className="flex justify-end items-center space-x-2">
+              <button
+                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                onClick={() => props.onValidate(props.id)}
+              >
+                Validar
+              </button>
+              <button
+                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                onClick={() => props.onReject(props.id)}
+              >
+                Rechazar
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

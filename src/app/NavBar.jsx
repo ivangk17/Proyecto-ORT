@@ -18,8 +18,10 @@ export default function NavBar() {
     if (user && user.role) {
       if (user.role === 'admin') {
         setItemsNav([
+          { url: "/panel", texto: "Panel" },
           { url: "/", texto: "Publicaciones activas" },
-          { url: "/panel", texto: "Publicaciones no validadas" },
+          { url: "/panel/no-validadas", texto: "Publicaciones no validadas" },
+          { url: "/panel/rechazadas", texto: "Publicaciones rechazadas" },
         ]);
       } else {
         setItemsNav([
