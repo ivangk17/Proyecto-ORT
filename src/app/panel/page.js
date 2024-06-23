@@ -2,41 +2,50 @@
 import { useEffect, useState } from "react";
 import PublicacionesList from "./PublicacionesList";
 import Paginado from "../Paginado";
+import { useAuth } from "../../context/AuthContext";
 
 export default function PublicacionesNoValidadasPage() {
+  const { token, user } = useAuth();
   const [publicaciones, setPublicaciones] = useState([]);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(9);
   const [total, setTotal] = useState(-1);
 
-  const user = sessionStorage.getItem('user');
-  if (!user) {
+  useEffect(() => {
+    if (!user) {
       window.location.href = '/login';
       return null;
-  } 
+    } 
 
-  const role = JSON.parse(user).role;
-  if (role !== 'admin') {
-      window.location.href = '/';
-      return null;
-  }
+    const role = JSON.parse(user).role;
+    if (role !== 'admin') {
+        window.location.href = '/';
+        return null;
+    }
 
-  useEffect(() => {
-    fetchPublicaciones();
+    if(token){
+      fetchPublicaciones();
+    }
+    
   }, [page, pageSize]);
 
   const fetchPublicaciones = () => {
-    fetch(`http://localhost:3000/api/publicaciones/noValidas?page=${page}&pageSize=${pageSize}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setPublicaciones(data.publicaciones);
-        setTotal(data.total);
-      });
+    fetch(`http://localhost:3000/api/publicaciones/noValidas?page=${page}&pageSize=${pageSize}`,
+     {
+      headers: {
+        'authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    }
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      setPublicaciones(data.publicaciones);
+      setTotal(data.total);
+    })
+    .catch((error) => console.error('Error fetching publications:', error));
   };
 
   const handleValidate = (id) => {
-    const token = sessionStorage.getItem('token');
-  
     fetch(`http://localhost:3000/api/publicaciones/validar/${id}`, {
       method: 'PUT',
       headers: {
@@ -55,8 +64,6 @@ export default function PublicacionesNoValidadasPage() {
   };
 
   const handleReject = (id) => {
-    const token = sessionStorage.getItem('token');
-
     fetch(`http://localhost:3000/api/publicaciones/rechazar/${id}`, {
       method: 'PUT',
       headers: {

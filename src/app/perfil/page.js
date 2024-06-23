@@ -2,40 +2,42 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-export default function PageUsuario() {
+import { useAuth } from '../../context/AuthContext'; 
+
+export default function PagePerfil() {
   const [publication, setPublication] = useState(null);
   const [deletePublication, setDeletePublication] = useState(false);
-  const user = sessionStorage.getItem('user');
-    if (!user) {
-      window.location.href = '/login';
-      return;
-    } 
+  const { token, user } = useAuth();
 
+  useEffect(() => {
+
+    if (!user || !token) {
+      window.location.href = '/login';
+      return false;
+    }
+    
     const role = JSON.parse(user).role;
     if (role !== 'profesor') {
       window.location.href = '/';
-      return;
+      return false;
     }
-
-  useEffect(() => {
 
     const userId = JSON.parse(user)['_id'];
     console.log(userId);
 
     if (!userId) {
       window.location.href = '/login';
-      return;
+      return false;
     }
 
     fetch(`http://localhost:3000/api/publicaciones/byUser/${userId}`)
       .then(response => response.json())
-      .then(data => 
-      setPublication(data))
+      .then(data => setPublication(data))
       .catch(error => console.error('Error fetching publication:', error));
-  }, [deletePublication]); 
+
+  }, [deletePublication, user, token]);
 
   const handleDeletePublication = () => {
-    const token = sessionStorage.getItem('token');
     fetch(`http://localhost:3000/api/publicaciones/delete/${publication._id}`, {
       method: 'DELETE',
       headers: {
@@ -45,11 +47,11 @@ export default function PageUsuario() {
     })
       .then(response => response.json())
       .then(data => {
-        console.log('Publication deleted:', data);
         setDeletePublication(true);
       })
       .catch(error => console.error('Error deleting publication:', error));
   }
+
   return (
        <div 
             className="min-h-screen flex flex-col flex items-center justify-center mx-auto max-w-screen-xl bg-center bg-no-repeat overflow-hidden relative"

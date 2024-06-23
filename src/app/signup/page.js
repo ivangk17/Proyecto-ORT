@@ -1,11 +1,18 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { handlerSignup } from "./handlerSignup";
 import SignupForm from "./SignupForm";
 import BackgroundImage from "./BackgroundImage";
+import { useAuth } from "../../context/AuthContext";
 
 export default function SignupPage() {
   const [error, setError] = useState(null);
+  const {user, token} = useAuth();
+
+  if (token || user) {
+    window.location.href = '/';
+    return null;
+  } 
 
   const handleSubmit = async (event) => {
     event.preventDefault();

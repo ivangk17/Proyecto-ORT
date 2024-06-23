@@ -1,9 +1,11 @@
 "use client";
+import { useAuth } from '../../../context/AuthContext';
 import { useState, useEffect } from 'react';
 import { options } from '../publicar/mockOptions';
 import FormEditar from './FormEditar';
 
 export default function PageEditar() {
+    const { token, user } = useAuth();
     const [selectedOptions, setSelectedOptions] = useState([]);
     const [materiasSeleccionadas, setMaterias] = useState([]);
     const [publicacionId, setPublicacionId] = useState();
@@ -14,56 +16,58 @@ export default function PageEditar() {
     });
     const [validacionCompleta, setValidacionCompleta] = useState(false);
 
-    const user = sessionStorage.getItem('user');
-    if (!user) {
-        window.location.href = '/login';
-        return null;
-    } 
+    
 
-    const role = JSON.parse(user).role;
-    if (role !== 'profesor') {
-        window.location.href = '/';
-        return null;
-    }
-
-    const token = sessionStorage.getItem('token');
-    const userId = JSON.parse(user)['_id'];
+    
 
     useEffect(() => {
-        const fetchPublicacion = async () => {
-            try {
-                const response = await fetch(`http://localhost:3000/api/publicaciones/byUser/${userId}`, {
-                    headers: {
-                        "authorization": `Bearer ${token}`
-                    }
-                });
-                if (response.status === 200) {
-                    const publicacion = await response.json();
-                    if (publicacion.validate || publicacion.rejected) {
-                        setFormData({
-                            telefono: publicacion.telefono,
-                            precio: publicacion.precio,
-                            description: publicacion.description
-                        });
-                        const selected = options.filter(option => publicacion.materias.includes(option.value));
-                        setSelectedOptions(selected);
-                        setMaterias(publicacion.materias);
-                        setPublicacionId(publicacion['_id']);
-                        setValidacionCompleta(true); // Marcar la validación completa como verdadera
-                    } else {
-                        window.location.href = '/perfil';
-                    }
+
+        if (!user) {
+            window.location.href = '/login';
+            return false;
+        } 
+    
+        const role = JSON.parse(user).role;
+        if (role !== 'profesor') {
+            window.location.href = '/';
+            return false;
+        }
+        
+        fetchPublicacion();
+    }, [token]);
+
+    const fetchPublicacion = async () => {
+        const userId = JSON.parse(user)['_id'];
+        try {
+            const response = await fetch(`http://localhost:3000/api/publicaciones/byUser/${userId}`, {
+                headers: {
+                    "authorization": `Bearer ${token}`
+                }
+            });
+            if (response.status === 200) {
+                const publicacion = await response.json();
+                if (publicacion.validate || publicacion.rejected) {
+                    setFormData({
+                        telefono: publicacion.telefono,
+                        precio: publicacion.precio,
+                        description: publicacion.description
+                    });
+                    const selected = options.filter(option => publicacion.materias.includes(option.value));
+                    setSelectedOptions(selected);
+                    setMaterias(publicacion.materias);
+                    setPublicacionId(publicacion['_id']);
+                    setValidacionCompleta(true); // Marcar la validación completa como verdadera
                 } else {
                     window.location.href = '/perfil';
                 }
-            } catch (error) {
-                console.error("Error fetching the publication:", error);
+            } else {
                 window.location.href = '/perfil';
             }
-        };
-
-        fetchPublicacion();
-    }, [userId, token]);
+        } catch (error) {
+            console.error("Error fetching the publication:", error);
+            window.location.href = '/perfil';
+        }
+    };
 
     const handleChange = (selected) => {
         setSelectedOptions(selected);

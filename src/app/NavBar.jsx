@@ -3,9 +3,10 @@ import Logo from "./Logo";
 import MenuList from "./MenuList";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { useAuth } from '../context/AuthContext'
 
 export default function NavBar() {
-  const token = sessionStorage.getItem('token');
+  const { token, user, setToken, setUser } = useAuth();
   const [itemsNav, setItemsNav] = useState([
     { url: "/", texto: "Publicaciones" },
     { url: "/quienes-somos", texto: "¿Quienes Somos?" },
@@ -18,8 +19,8 @@ export default function NavBar() {
     if (user && user.role) {
       if (user.role === 'admin') {
         setItemsNav([
-          { url: "/panel/validadas", texto: "Publicaciones validadas" },
-          { url: "/panel/novalidadas", texto: "Publicaciones no validadas" },
+          { url: "/", texto: "Publicaciones activas" },
+          { url: "/panel", texto: "Publicaciones no validadas" },
         ]);
       } else {
         setItemsNav([
@@ -31,10 +32,9 @@ export default function NavBar() {
   };
 
   useEffect(() => {
-    console.log("render");
     if (token) {
-      const user = JSON.parse(sessionStorage.getItem('user'));
-      updateMenuItems(user);
+      const usuario = JSON.parse(user);
+      updateMenuItems(usuario);
     } else {
       setItemsNav([
         { url: "/", texto: "Publicaciones" },
@@ -44,7 +44,7 @@ export default function NavBar() {
         { url: "/signup", texto: "Registrate"}
       ]);
     }
-  }, []);
+  }, [token, user]);
 
   const handleLogout = () => {
     sessionStorage.removeItem('token');

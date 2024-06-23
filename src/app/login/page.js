@@ -3,19 +3,17 @@ import { redirect } from "next/navigation";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { handlerLogin } from "./loginService/loginServer";
+import { handlerLogin } from "./handlerLogin";
+import { useAuth } from '../../context/AuthContext';
 
 
 export default function PageLogin() {
   const [error, setError] = useState(null);
-  const [token, setToken] = useState(sessionStorage.getItem('token'));
-  const [user, setUser] = useState(sessionStorage.getItem('user'));
+  const { token, setToken, user, setUser } = useAuth();
   const [inicio, setInicio] = useState(false);
 
   useEffect(() => { 
     if (token) {
-      sessionStorage.setItem('token', token);
-      sessionStorage.setItem('user', user);
       const usuario = JSON.parse(user);
       let vista;
       if(usuario.role === 'admin'){
@@ -24,22 +22,23 @@ export default function PageLogin() {
         vista = '/perfil';
       }
       redirect(vista);
-      
     } 
-  }, [inicio]);
+  }, [token, user, inicio]);
  
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setInicio(true);
     const formData = new FormData(event.target);
-    const user = {
+    const usuario = {
       email: formData.get("email"),
       password: formData.get("password"),
     };
-    await handlerLogin(user, setInicio, setError, setToken, setUser);
+    await handlerLogin(usuario, setInicio, setError, setToken, setUser);
   };
 
+  if (token) {
+    return null;
+  }
   
 
 
