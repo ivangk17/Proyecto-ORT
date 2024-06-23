@@ -27,6 +27,8 @@ export default function NavBar() {
         setItemsNav([
           { url: "/", texto: "Publicaciones" },
           { url: "/perfil", texto: "Mi publicacion" },
+          { url: "/quienes-somos", texto: "¿Quienes Somos?" },
+          { url: "/faq", texto: "FAQ" }
         ]);
       }
     }
