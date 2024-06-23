@@ -3,7 +3,7 @@ import { options } from "./perfil/publicar/mockOptions";
 
 export default function FiltroMateria({ handleMateriaChange }) {
     return (
-        <div className="flex justify-end mt-5 mr-5">
+        <div className="flex justify-end mt-3 mr-5">
             <div className="w-1/5">
                 <Select
                     onChange={handleMateriaChange}
