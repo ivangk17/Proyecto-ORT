@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { FaWhatsapp } from 'react-icons/fa';
 
 export default function Publicacion(props) {
   return (
@@ -33,9 +34,10 @@ export default function Publicacion(props) {
           <Link
             target="_blank"
             href={`https://web.whatsapp.com/send?phone=${props.telefono}&text=Hola ${props.name}, vi tu publicación en EduWave y me gustaría saber más sobre tus clases`}
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-3 rounded-full text-sm"
+            className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-3 rounded-full text-sm flex items-center"
           >
-            Contactar
+            <FaWhatsapp size={20} />
+            <span className="ml-1">Contactar</span>
           </Link>
         </div>
       </div>
