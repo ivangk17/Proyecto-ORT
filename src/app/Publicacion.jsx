@@ -30,7 +30,10 @@ export default function Publicacion(props) {
             </span>
           ))}
         </div>
-        <div className="flex justify-end items-center mt-3">
+        <div className="flex justify-between items-center mt-3">
+          <div>
+            <span className="text-sm font-semibold">Honorarios: ${props.precio}</span>
+          </div>
           <Link
             target="_blank"
             href={`https://web.whatsapp.com/send?phone=${props.telefono}&text=Hola ${props.name}, vi tu publicación en EduWave y me gustaría saber más sobre tus clases`}
