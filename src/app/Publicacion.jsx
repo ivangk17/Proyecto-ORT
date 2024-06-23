@@ -4,7 +4,7 @@ import { FaWhatsapp } from 'react-icons/fa';
 
 export default function Publicacion(props) {
   return (
-    <div className="bg-blue-900 text-white shadow-lg rounded-lg overflow-hidden p-4 flex flex-col justify-between h-full">
+    <div className="bg-blue-900 text-white shadow-lg rounded-lg overflow-hidden p-4 flex flex-col justify-between">
       <div className="flex items-center">
         <Image
           src="/img/profesor.jpg"
@@ -14,8 +14,8 @@ export default function Publicacion(props) {
           className="rounded-full"
         />
         <div className="ml-4">
-          <h2 className="text-xl font-bold">{props.name}</h2>
-          <p className="mt-2">{props.description}</p>
+          <h2 className="text-sm font-bold">{props.name}</h2>
+          <p className="text-xs mt-2">{props.description}</p>
         </div>
       </div>
       <div className="mt-4">
@@ -30,14 +30,14 @@ export default function Publicacion(props) {
             </span>
           ))}
         </div>
-        <div className="flex justify-end items-center mt-auto">
+        <div className="flex justify-end items-center mt-3">
           <Link
             target="_blank"
             href={`https://web.whatsapp.com/send?phone=${props.telefono}&text=Hola ${props.name}, vi tu publicación en EduWave y me gustaría saber más sobre tus clases`}
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-3 rounded-full text-sm flex items-center"
+            className="bg-gradient-to-r from-orange-500 to-pink-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full text-xs flex items-center"
           >
-            <FaWhatsapp size={20} />
-            <span className="ml-1">Contactar</span>
+            <FaWhatsapp size={10} />
+            <span className="ml-1">Enviar WhatsApp</span>
           </Link>
         </div>
       </div>
