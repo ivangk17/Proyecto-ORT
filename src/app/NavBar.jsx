@@ -10,7 +10,6 @@ export default function NavBar() {
   const [itemsNav, setItemsNav] = useState([
     { url: "/", texto: "Publicaciones" },
     { url: "/quienes-somos", texto: "¿Quienes Somos?" },
-    { url: "/contacto", texto: "Contacto" },
     { url: "/faq", texto: "FAQ" },
     { url: "/signup", texto: "Registrate"}
   ]);
@@ -39,7 +38,6 @@ export default function NavBar() {
       setItemsNav([
         { url: "/", texto: "Publicaciones" },
         { url: "/quienes-somos", texto: "¿Quienes Somos?" },
-        { url: "/contacto", texto: "Contacto" },
         { url: "/faq", texto: "FAQ" },
         { url: "/signup", texto: "Registrate"}
       ]);
@@ -52,7 +50,6 @@ export default function NavBar() {
     setItemsNav([
       { url: "/", texto: "Publicaciones" },
       { url: "/quienes-somos", texto: "¿Quienes Somos?" },
-      { url: "/contacto", texto: "Contacto" },
       { url: "/faq", texto: "FAQ" },
       { url: "/signup", texto: "Registrate"}
     ]);

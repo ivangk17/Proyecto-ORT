@@ -12,8 +12,8 @@ export default function Publicacion(props) {
           className="rounded-full"
         />
         <div className="ml-4">
-          <h2 className="text-xl font-bold">{props.name}</h2>
-          <p className="mt-2">{props.description}</p>
+          <h2 className="text-sm font-bold">{props.name}</h2>
+          <p className="text-xs mt-2">{props.description}</p>
         </div>
       </div>
       <div className="mt-4">

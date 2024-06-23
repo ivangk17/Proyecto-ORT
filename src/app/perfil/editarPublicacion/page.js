@@ -1,4 +1,6 @@
 "use client";
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 import { useAuth } from '../../../context/AuthContext';
 import { useState, useEffect } from 'react';
 import { options } from '../publicar/mockOptions';
@@ -101,11 +103,35 @@ export default function PageEditar() {
                 },
                 body: JSON.stringify(publicacion),
             });
-            if(response.status === 200){
-                window.location.href = '/perfil';
+    
+            if (response.status === 200) {
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Actualización exitosa!',
+                    text: 'La publicación ha sido actualizada correctamente, recuerde que la misma no se hara visible hasta tanto un administrador la valide.',
+                    confirmButtonText: 'Ir a la publicacion'
+                }).then(() => {
+                    window.location.href = '/perfil';
+                });
+            } else if (response.status === 400) {
+                const errorResponse = await response.json();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: errorResponse.error,
+                    confirmButtonText: 'Aceptar'
+                });
+            } else {
+                throw new Error('Error en la solicitud de actualización');
             }
         } catch (error) {
             console.error("Error en la solicitud de registro:", error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Hubo un problema al actualizar la publicación. Por favor, inténtelo nuevamente.',
+                confirmButtonText: 'Aceptar'
+            });
         }
     };
 

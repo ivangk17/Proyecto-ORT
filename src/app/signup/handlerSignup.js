@@ -1,4 +1,6 @@
 import { redirect } from "next/navigation";
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 export async function handlerSignup (nuevoUsuario, setError) {
     try {
@@ -11,10 +13,15 @@ export async function handlerSignup (nuevoUsuario, setError) {
       });
 
       if (response.status === 200) {
-        console.log("ok");
-        window.location.href = "/login";
+        Swal.fire({
+          title: '¡Registro Exitoso!',
+          text: 'Tu cuenta ha sido registrada correctamente.',
+          icon: 'success',
+          confirmButtonText: 'Ir al login',
+        }).then(() => {
+          window.location.href = "/login";
+        });
       } else {
-        // Registro fallido, manejar el error
         setError("Error al registrar usuario.");
       }
     } catch (error) {

@@ -50,6 +50,7 @@ export default function FormEditar({ handleSubmit, handleInputChange, handleChan
                     options={options}
                     className="w-full"
                     placeholder="Selecciona tus opciones"
+                    required
                 /> 
             </div>
 

@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import PublicacionesList from "./PublicacionesList";
 import Paginado from "../Paginado";
 import { useAuth } from "../../context/AuthContext";
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
+
 
 export default function PublicacionesNoValidadasPage() {
   const { token, user } = useAuth();
@@ -46,40 +49,112 @@ export default function PublicacionesNoValidadasPage() {
   };
 
   const handleValidate = (id) => {
-    fetch(`http://localhost:3000/api/publicaciones/validar/${id}`, {
-      method: 'PUT',
-      headers: {
-        'authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Estás a punto de validar esta publicación como correcta.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, validar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch(`http://localhost:3000/api/publicaciones/validar/${id}`, {
+          method: 'PUT',
+          headers: {
+            'authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          })
+          .then(() => {
+            fetchPublicaciones();
+            Swal.fire({
+              icon: 'success',
+              title: '¡Validación exitosa!',
+              text: 'La publicación ha sido validada correctamente.',
+              confirmButtonText: 'Aceptar'
+            });
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Hubo un problema al validar la publicación.',
+              confirmButtonText: 'Aceptar'
+            });
+          });
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire({
+          title: 'Cancelado',
+          text: 'No se ha validado la publicación.',
+          icon: 'info',
+          confirmButtonText: 'Aceptar'
+        });
       }
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(() => fetchPublicaciones())
-      .catch(error => console.error('Error:', error));
+    });
   };
+  const handleReject = async (publicacionId) => {
+    const { value: razon } = await Swal.fire({
+        title: 'Ingrese la Razón de Rechazo',
+        input: 'textarea',
+        inputLabel: 'Razón',
+        inputPlaceholder: 'Escriba la razón de rechazo...',
+        inputAttributes: {
+            'aria-label': 'Razón de rechazo'
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Enviar',
+        cancelButtonText: 'Cancelar',
+        showLoaderOnConfirm: true,
+        preConfirm: (razon) => {
+            if (!razon) {
+                Swal.showValidationMessage('Debe ingresar una razón de rechazo');
+            }
+            return razon;
+        },
+        allowOutsideClick: () => !Swal.isLoading()
+    });
 
-  const handleReject = (id) => {
-    fetch(`http://localhost:3000/api/publicaciones/rechazar/${id}`, {
-      method: 'PUT',
-      headers: {
-        'authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
+    if (razon) {
+        try {
+            const response = await fetch(`http://localhost:3000/api/publicaciones/rechazar/${publicacionId}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "authorization": `Bearer ${token}`
+                },
+                body:JSON.stringify({reason:razon})    
+            });
+
+            if (response.status === 200) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Publicación Rechazada',
+                    text: 'La publicación ha sido rechazada correctamente.',
+                    confirmButtonText: 'Aceptar'
+                })
+                .then(() => {
+                  fetchPublicaciones();
+              });
+            } else {
+                throw new Error('Error en el rechazo de la publicación');
+            }
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Hubo un problema al intentar rechazar la publicación. Inténtelo de nuevo más tarde.',
+                confirmButtonText: 'Aceptar'
+            });
         }
-        return response.json();
-      })
-      .then(() => fetchPublicaciones())
-      .catch(error => console.error('Error:', error));
-  };
+    }
+};
 
   const totalPages = Math.ceil(total / pageSize);
 
