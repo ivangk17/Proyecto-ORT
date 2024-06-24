@@ -42,8 +42,14 @@ const developers = [
 
 export default function Agradecimientos() {
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-500 to-purple-500 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto text-center text-white">
+    <div
+      className="min-h-screen flex flex-col justify-between mx-auto max-w-screen-xl bg-center bg-no-repeat overflow-hidden relative"
+      style={{
+        backgroundImage: `url('/img/eduwave_login.jpg')`,
+        backgroundSize: "cover",
+      }}
+    >
+      <div className="max-w-4xl mx-auto text-center text-white bg-black bg-opacity-70 p-8 rounded-lg">
         <h1 className="text-4xl font-bold mb-8">Agradecimientos</h1>
         <p className="text-lg mb-8">
           Este proyecto no habría sido posible sin el esfuerzo y la dedicación
@@ -54,10 +60,11 @@ export default function Agradecimientos() {
           {developers.map((dev, index) => (
             <Link
               href={dev.linkedin}
-              className="bg-white rounded-lg shadow-lg p-6 transform hover:scale-105 transition-transform"
+              className="bg-blue-800 text-white rounded-lg shadow-lg p-6 transform hover:scale-105 transition-transform"
               target="_blank"
+              key={index}
             >
-              <div key={index}>
+              <div>
                 <Image
                   src={dev.image}
                   alt={dev.name}
@@ -65,10 +72,10 @@ export default function Agradecimientos() {
                   height={100}
                   className="w-32 h-32 mx-auto rounded-full mb-4 border-4 border-purple-600"
                 />
-                <h2 className="text-xl font-semibold mb-2 text-purple-600">
+                <h2 className="text-xl font-semibold mb-2 text-white">
                   {dev.name}
                 </h2>
-                <p className="text-gray-700">{dev.description}</p>
+                <p className="text-gray-300">{dev.description}</p>
               </div>
             </Link>
           ))}
