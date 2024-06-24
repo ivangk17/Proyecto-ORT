@@ -3,7 +3,7 @@ import Logo from "./Logo";
 import MenuList from "./MenuList";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../context/AuthContext';
 
 export default function NavBar() {
   const { token, user, setToken, setUser } = useAuth();
@@ -11,7 +11,7 @@ export default function NavBar() {
     { url: "/", texto: "Publicaciones" },
     { url: "/quienes-somos", texto: "¿Quienes Somos?" },
     { url: "/faq", texto: "FAQ" },
-    { url: "/signup", texto: "Registrate"}
+    { url: "/signup", texto: "Registrate" }
   ]);
 
   const updateMenuItems = (user) => {
@@ -29,6 +29,7 @@ export default function NavBar() {
           { url: "/perfil", texto: "Mi publicacion" },
           { url: "/quienes-somos", texto: "¿Quienes Somos?" },
           { url: "/faq", texto: "FAQ" }
+
         ]);
       }
     }
@@ -43,7 +44,8 @@ export default function NavBar() {
         { url: "/", texto: "Publicaciones" },
         { url: "/quienes-somos", texto: "¿Quienes Somos?" },
         { url: "/faq", texto: "FAQ" },
-        { url: "/signup", texto: "Registrate"}
+        { url: "/signup", texto: "Registrate" },
+        {url: "/agradecimientos", texto: "Agradecimientos"}
       ]);
     }
   }, [token, user]);
@@ -51,11 +53,13 @@ export default function NavBar() {
   const handleLogout = () => {
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('user');
+    setToken(null);
+    setUser(null);
     setItemsNav([
       { url: "/", texto: "Publicaciones" },
       { url: "/quienes-somos", texto: "¿Quienes Somos?" },
       { url: "/faq", texto: "FAQ" },
-      { url: "/signup", texto: "Registrate"}
+      { url: "/signup", texto: "Registrate" }
     ]);
     window.location.href = "/login";
   };
@@ -68,6 +72,11 @@ export default function NavBar() {
           <MenuList menuItems={itemsNav} />
         </div>
         <div className="flex items-center gap-4">
+          {token && user ? (
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300 mr-4">
+              {JSON.parse(user).username}
+            </span>
+          ) : null}
           <div className="sm:flex sm:gap-4">
             {token ? (
               <button 
@@ -78,7 +87,7 @@ export default function NavBar() {
               </button>
             ) : (
               <Link href="/login" className="block rounded-md bg-teal-600 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-teal-700 dark:hover:bg-teal-500">
-                  Login
+                Login
               </Link>
             )}
           </div>
