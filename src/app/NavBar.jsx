@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useAuth } from '../context/AuthContext';
 import { FaUser, FaCog, FaSignOutAlt } from 'react-icons/fa';
-import { MdHelp, MdScreenShare, MdFeedback } from 'react-icons/md';
 
 export default function NavBar() {
   const { token, user, setToken, setUser } = useAuth();
@@ -72,8 +71,8 @@ export default function NavBar() {
     setDropdownOpen(!dropdownOpen);
   };
 
-  const isProfileDisabled = true; // Aquí puedes establecer la lógica para deshabilitar el perfil
-  const isSettingsDisabled = true; // Aquí puedes establecer la lógica para deshabilitar la configuración
+  const isProfileDisabled = true; 
+  const isSettingsDisabled = true; 
 
   return (
     <header className="bg-white dark:bg-gray-900">
