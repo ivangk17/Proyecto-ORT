@@ -24,7 +24,7 @@ export default function PublicacionesRechazadas() {
       setPublicaciones(data.publicaciones);
       setTotal(data.total);
     })
-    .catch((error) => console.error('Error fetching publications:', error));
+    .catch((error) => console.error(error));
   };
 
   useEffect(() => {
@@ -44,8 +44,6 @@ export default function PublicacionesRechazadas() {
     }
     
   }, [page, pageSize]);
-
-  
 
   const totalPages = Math.ceil(total / pageSize);
 

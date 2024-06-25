@@ -13,6 +13,7 @@ export default function NavBar() {
     { url: "/", texto: "Publicaciones" },
     { url: "/quienes-somos", texto: "¿Quienes Somos?" },
     { url: "/faq", texto: "FAQ" },
+    { url: "/agradecimientos", texto: "Agradecimientos" },
     { url: "/signup", texto: "Registrate" }
   ]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -47,8 +48,8 @@ export default function NavBar() {
         { url: "/", texto: "Publicaciones" },
         { url: "/quienes-somos", texto: "¿Quienes Somos?" },
         { url: "/faq", texto: "FAQ" },
+        { url: "/agradecimientos", texto: "Agradecimientos" },
         { url: "/signup", texto: "Registrate" },
-        { url: "/agradecimientos", texto: "Agradecimientos" }
       ]);
     }
   }, [token, user]);

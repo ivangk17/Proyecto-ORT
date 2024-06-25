@@ -103,7 +103,7 @@ export default function PublicacionesNoValidadasPage() {
     const { value: razon } = await Swal.fire({
         title: 'Ingrese la Razón de Rechazo',
         input: 'textarea',
-        inputLabel: 'Razón',
+        inputLabel: 'La razón será visible para el profesor.',
         inputPlaceholder: 'Escriba la razón de rechazo...',
         inputAttributes: {
             'aria-label': 'Razón de rechazo'

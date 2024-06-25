@@ -25,7 +25,7 @@ export default function Footer() {
               <a href="https://www.facebook.com/eduwave"  target="_blank" className="hover:text-gray-300">
                 <FaFacebook size={18} />
               </a>
-              <a href="https://www.instagram.com/delfikraselnik/" target="_blank" className="hover:text-gray-300">
+              <a href="https://www.instagram.com/eduwave/" target="_blank" className="hover:text-gray-300">
                 <FaInstagram size={18} />
               </a>
               <a href="https://www.twitter.com/eduwave" target="_blank" className="hover:text-gray-300">
